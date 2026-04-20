@@ -19,7 +19,7 @@
 		width: 30%;
 		color: white;
 		-webkit-text-stroke: 1px black;
-		font-size: 300%;
+		font-size: 150%;
 		height: 80%;
 		transition: 0.1s ease;
 		border-radius: 5px;
@@ -48,14 +48,18 @@
 <body>
     <img src="logoA.png", style="width:30vh; aspect-ratio: 5/3; position: fixed; z-index: 255;" id="title"></img>
     <div class="gamesDiv">
-		<button onclick="carclick()">Car clicker</button>
+		<button onclick="carclick()" id="carButt">Car clicker</button>
 	</div>
 	<h2>lol</h2>
 	<script>
-    function carclick(){
-		window.open("CarClicker/CarClicker.html");
-	}
-	const logo = document.getElementById('title');
+		let height = window.innerHeight;
+		let width = window.innerWidth;
+		const carButt = document.getElementById("carButt");
+		
+		function carclick(){
+			window.open("CarClicker/CarClicker.html");
+		}
+		const logo = document.getElementById("title");
 
 		logo.onmouseover = () => {
 			logo.src = 'logoB.png';
@@ -63,6 +67,19 @@
 		logo.onmouseout = () => {
 			logo.src = 'logoA.png';
 		};
+		function sResize(){
+			height = window.innerHeight;
+			width = window.innerWidth;
+			
+			if(height >= width){
+				carButt.style.width = '100%';
+			}
+			else{
+				carButt.style.width = '30%';
+			}
+		}
+		
+		window.addEventListener('resize', sResize);
   </script>
 </body>
 </html>
