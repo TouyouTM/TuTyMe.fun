@@ -7,6 +7,7 @@
 	<title>car clicker [TuTyMe fun!]</title>
 	<style>
 		#carButt {
+			touch-action: manipulation;
 			background-image: url(car.png);
 			background-position: center;
 			transition: 0.05s ease;
@@ -44,7 +45,7 @@
 </head>
 
 <body>
-	<img src="logoA.png", style="width:30vh; aspect-ratio: 5/3; position: fixed; z-index: 255;" id="title"></img>
+	<img src="logoA.png", style="width:20vh; aspect-ratio: 5/3; position: fixed; z-index: 255;" id="title"></img>
 	
 	<button id="carButt">car</button>
 	<h1 id="scoreTxt">0</h1>
@@ -67,7 +68,7 @@
 			logo.src = "logoA.png";
 		};
 		logo.onclick = () => {
-			window.open("../Main.html");
+			window.location.href = "../Main.html";
 		};
 	</script>
 </body>
