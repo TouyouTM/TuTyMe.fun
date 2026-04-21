@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<meta name="CarClicker" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="CarClicker" content="width=device-width, initial-scale=1">
 	<title>car clicker [TuTyMe fun!]</title>
 	<style>
 		#carButt {
@@ -39,8 +39,20 @@
 			left: calc(50vw - 10vh);
 			top: calc(10vh - 5vh);
 		}
+		#shopDiv {
+			background: lightgrey;
+			width: 100vw;
+			height: 100vh;
+			position: absolute;
+			top: 90vh;
+		}
 		body {
 			background: grey;
+			margin: 0px;
+		}
+		.updateButt {
+			width: 100%;
+			height: 7vh;
 		}
 	</style>
 </head>
@@ -48,26 +60,46 @@
 <body>
 	<img src="logoA.png", style="width:20vh; aspect-ratio: 5/3; position: fixed; z-index: 255;" id="title"></img>
 	
-	<button id="carButt">car</button>
 	<h1 id="scoreTxt">0</h1>
+	<button id="carButt">car</button>
+	
+	<div id="shopDiv">
+		<h1>SHOP</h1>
+		<button id="clickUpd" class="updateButt">upgrade click [1 per click/100]</button>
+	</div>
 	
 	<script>
 		const scoreTxt = document.getElementById("scoreTxt");
 		const carButt = document.getElementById("carButt");
 		const logo = document.getElementById("title");
+		const clickUpd = document.getElementById("clickUpd");
 		let score = 0;
+		let clickUpdNeed = 100;
+		let perClick = 1;
+		
+		clickUpd.onclick = () => {
+			if(score >= clickUpdNeed){
+				score -= clickUpdNeed;
+				perClick++;
+				clickUpdNeed += 150;
+				clickUpd.innerText = "upgrade click [" + perClick + " per click/" + clickUpdNeed + "]";
+				scoreTxt.innerText = score;
+			}
+		}
 		
 		carButt.onclick = () => {
-			score++;
+			score += perClick;
 			scoreTxt.innerText = score.toString();
 		}
 		
 		logo.onmouseover = () => {
 			logo.src = "logoB.png";
 		};
+		
 		logo.onmouseout = () => {
 			logo.src = "logoA.png";
 		};
+		
 		logo.onclick = () => {
 			window.location.href = "../Main.html";
 		};
