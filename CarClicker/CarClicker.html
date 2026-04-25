@@ -107,8 +107,19 @@
 			localStorage.setItem("clickUpdNeed", String(clickUpdNeed));
 			localStorage.setItem("perClick", String(perClick));
 		}
-		
 		loadGame();
+		if(perClick <= 0) {
+			perClick = 1;
+		}
+		if(autoT <= 0) {
+			autoT = 1000;
+		}
+		if(autoUpdNeed <= 0){
+			autoUpdNeed = 1000;
+		}
+		if(clickUpdNeed <= 0){
+			clickUpdNeed = 100;
+		}
 		clickUpd.innerText = "upgrade click [" + perClick + " per click/" + clickUpdNeed + "]";
 		autoUpd.innerText = "upgrade auto click [" + autoC + " per sec/" + autoUpdNeed + "]";
 		scoreTxt.innerText = score;
