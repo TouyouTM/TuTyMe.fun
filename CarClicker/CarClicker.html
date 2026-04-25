@@ -51,6 +51,7 @@
 			margin: 0px;
 		}
 		.updateButt {
+			touch-action: manipulation;
 			width: 100%;
 			height: 7vh;
 		}
@@ -58,14 +59,18 @@
 </head>
 
 <body>
-	<img src="logoA.png", style="width:20vh; aspect-ratio: 5/3; position: fixed; z-index: 255;" id="title"></img>
+	<img src="logoA.png", style="width:20vh; aspect-ratio: 5/3; position: fixed; z-index: 255; opacity: 0.5;" id="title"></img>
 	
 	<h1 id="scoreTxt">0</h1>
 	<button id="carButt">car</button>
+	<h1 id="gameSTxt" style="position: absolute; width: 30vh; height: 5vh; left: calc(30vw - 15vh); top: 0vh;">Game saved!</h1>
 	
 	<div id="shopDiv">
 		<h1>SHOP</h1>
+		<p>⚠Hey! If you will delete this site's cash, you will delete YOUR SAVES!⚠</p>
+		<button id="saveButt" class="updateButt">save game</button>
 		<button id="clickUpd" class="updateButt">upgrade click [1 per click/100]</button>
+		<button id="autoUpd" class="updateButt">upgrade auto click [0 per click/1000]</button>
 	</div>
 	
 	<script>
@@ -73,9 +78,44 @@
 		const carButt = document.getElementById("carButt");
 		const logo = document.getElementById("title");
 		const clickUpd = document.getElementById("clickUpd");
+		const autoUpd = document.getElementById("autoUpd");
+		const saveButt = document.getElementById("saveButt");
+		const gameSTxt = document.getElementById("gameSTxt");
+		let autoC = 0;
+		let autoT = 1000;
+		let autoUpdNeed = 1000;
 		let score = 0;
 		let clickUpdNeed = 100;
 		let perClick = 1;
+		
+		gameSTxt.style.opacity = "0";
+		
+		function loadGame() {
+			autoC = Number(localStorage.getItem("autoC"));
+			autoT = Number(localStorage.getItem("autoT"));
+			autoUpdNeed = Number(localStorage.getItem("autoUpdNeed"));
+			score = Number(localStorage.getItem("score"));
+			clickUpdNeed = Number(localStorage.getItem("clickUpdNeed"));
+			perClick = Number(localStorage.getItem("perClick"));
+		}
+		
+		function saveGame() {
+			localStorage.setItem("autoC", String(autoC));
+			localStorage.setItem("autoT", String(autoT));
+			localStorage.setItem("autoUpdNeed", String(autoUpdNeed));
+			localStorage.setItem("score", String(score));
+			localStorage.setItem("clickUpdNeed", String(clickUpdNeed));
+			localStorage.setItem("perClick", String(perClick));
+		}
+		
+		loadGame();
+		clickUpd.innerText = "upgrade click [" + perClick + " per click/" + clickUpdNeed + "]";
+		autoUpd.innerText = "upgrade auto click [" + autoC + " per sec/" + autoUpdNeed + "]";
+		scoreTxt.innerText = score;
+		
+		function delay(ms) {
+			return new Promise(function(resolve){setTimeout(resolve, ms);});
+		}
 		
 		clickUpd.onclick = () => {
 			if(score >= clickUpdNeed){
@@ -83,6 +123,21 @@
 				perClick++;
 				clickUpdNeed += 150;
 				clickUpd.innerText = "upgrade click [" + perClick + " per click/" + clickUpdNeed + "]";
+				scoreTxt.innerText = score;
+			}
+		}
+		
+		saveButt.onclick = () => {
+			saveGame(); 
+			alert("Game saved!");
+		}
+		
+		autoUpd.onclick = () => {
+			if(score >= autoUpdNeed){
+				score -= autoUpdNeed;
+				autoUpdNeed += 500;
+				autoC++;
+				autoUpd.innerText = "upgrade click [" + autoC + " per click/" + autoUpdNeed + "]";
 				scoreTxt.innerText = score;
 			}
 		}
@@ -103,6 +158,27 @@
 		logo.onclick = () => {
 			window.location.href = "../Main.html";
 		};
+		
+		async function autoLoop(){
+			while(true){
+				await delay(autoT);
+				score += autoC;
+				scoreTxt.innerText = score.toString();
+			}
+		}
+		
+		async function saveLoop(){
+			while(true){
+				await delay(120000);
+				saveGame();
+				gameSTxt.style.opacity = "1";
+				await delay(1000);
+				gameSTxt.style.opacity = "0";
+			}
+		}
+		
+		saveLoop();
+		autoLoop();
 	</script>
 </body>
 </html>
